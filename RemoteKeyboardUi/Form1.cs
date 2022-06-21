@@ -15,14 +15,23 @@ namespace RemoteKeyboardUi {
     private SocketIO socketIo = new SocketIO("http://3.73.158.78:3000");
     private KeyListener _listener = new KeyListener();
     private InputSimulator _simulator = new InputSimulator();
-    
+
+    private void initializeHost(string id) {
+      _simulator.Keyboard.KeyPress(VirtualKeyCode.VK_B);
+    }
+
     public Form1() {
       InitializeComponent();
 
-      _listener.onPress("A", () => {
-        textBox1.Text += "A";
-        _simulator.Keyboard.KeyPress(VirtualKeyCode.VK_B);
-      });
+      foreach (var itemsKey in KeyboardMap.ITEMS.Keys) {
+        _listener.onPress(itemsKey, () => {
+          textBox1.Text += "A";
+        });
+
+        _listener.onRelease(itemsKey, () => {
+
+        });
+      }
 
       socketIo.OnAny((type, response) => {
           try {
